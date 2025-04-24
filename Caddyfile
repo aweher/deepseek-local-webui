@@ -1,0 +1,4 @@
+http:// {
+  reverse_proxy deepseek:7860
+}
+

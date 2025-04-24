@@ -1,0 +1,33 @@
+---
+services:
+  deepseek:
+    build: .
+    container_name: deepseek-webui
+    runtime: nvidia
+    environment:
+      - CLI_ARGS=--listen --listen-host 0.0.0.0
+    ports:
+      - "7860:7860"
+    volumes:
+      - deepseek-models:/app/webui/models
+      - deepseek-cache:/root/.cache/huggingface
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2
+    container_name: caddy-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  deepseek-models:
+  deepseek-cache:
+  caddy_data:
+  caddy_config:
+
